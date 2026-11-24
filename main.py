@@ -45,6 +45,11 @@ def main() -> None:
     os.makedirs(os.path.dirname(path), exist_ok=True)
     with open(path, "w", encoding="utf-8", newline="") as handle:
         handle.write(line)
+    # Read back what was written and refuse to report success unless it
+    # is byte for byte the line: the gate reads the file, not our memory.
+    with open(path, "r", encoding="utf-8", newline="") as handle:
+        if handle.read() != line:
+            raise SystemExit("entry.txt does not match the line")
     print(line)
 
 
